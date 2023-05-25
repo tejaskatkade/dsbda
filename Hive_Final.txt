@@ -1,0 +1,69 @@
+ jps
+ start-all.sh
+ hive
+show  databases;
+create database db1;
+show  databases;
+use db1;
+create table flight (fno int, year int, dest varchar(10),delay float);
+
+alter table flight rename to air_flight;
+
+alter table air_flight add columns (source varchar(10));
+
+create table flight (fno int, year int, dest varchar(10),delay float);
+
+ insert into flight values (123, 2009, "Mumbai", 30.0);
+insert into flight values (342, 2008, "Nagpur", 13.0);
+insert into flight values (232, 2008, "Pune", 0.0);
+insert into flight values (103, 2009, "Nashik",10.0);
+
+select * from flight;
+
+create table mflight (fno int, year int,source varchar(10))
+    > row format delimited
+    > fields terminated by ','
+    > lines terminated by '\n'
+    > stored as textfile;
+
+select * from mflight;
+
+insert into mflight values (121, 2010, "Mumbai");
+insert into mflight values (133, 2003, "Chennai");
+insert into mflight values (191, 2003, "Delhi");
+insert into mflight values (103, 2008, "Pune");
+
+ select * from mflight;
+
+select a.fno, a.year, a.dest, a.delay, b.source
+    > from flight a join mflight b
+    > on (a.fno = b.fno);
+
+show tables;
+
+select avg(delay) from flight where year = 2008;
+
+select *
+>from air_flight
+>join mflight
+>on air_flight.fno=mflight.fno;
+
+select*
+>from air_flight
+>left join mflight
+>on air_flight.fno=mflight.fno;
+
+create external table pd(
+>id int,name varchar(20),age int)
+>row format delimited
+>fields terminated by ','
+>location '/home/desktop';
+
+show tables;
+
+drop table mflight;
+show tables;
+
+
+`load data local inpath '/path where we create file.csv'
+>into table nflight;
